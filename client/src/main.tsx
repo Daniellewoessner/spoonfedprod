@@ -77,6 +77,7 @@ const router = createBrowserRouter([
               instructions: [],
               searchMode: false,
               matchingIngredients: "",
+              savedAt: new Date().toISOString(),
             }}
           />
         ),

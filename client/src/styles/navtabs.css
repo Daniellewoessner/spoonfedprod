@@ -1,89 +1,167 @@
-.nav-tabs {
-    width: 100%;
-    background-color: #EAF1E4;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    align-items: right;
-}
-
-.nav-container {
-    max-width: 1200px;
-    margin: 0 auto;
+.app-container {
     display: flex;
-    justify-content: left;
-    align-items: left;
-    gap: 2rem;
-}
-
-/* Override general link styles for nav links only */
-.nav-tabs .nav-link {
-    padding: 0.5rem 1rem !important;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    position: relative;
-    font-size: 1rem;
-}
-
-.nav-tabs .text-french-500 {
-    color: #6b838e;
-}
-
-.nav-tabs .text-lapis-500 {
-    color: #004E98;
-}
-
-.nav-tabs .text-french-500:hover {
-    color: #004E98;
-}
-
-.nav-tabs .font-bold {
-    font-weight: 700;
-}
-
-/* Underline effect */
-.nav-tabs .nav-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
+    min-height: 100vh;
+    background-color: #F5F7F2; /* Light cream background */
+  }
+  
+  /* Sidebar Styles */
+  .sidebar {
+    width: 260px;
+    background-color: #4A7856; /* Sage green */
+    color: white;
+    position: fixed;
+    height: 100vh;
     left: 0;
-    background-color: #004E98;
-    transition: width 0.3s ease;
-}
-
-.nav-tabs .nav-link:hover::after {
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #557A59; /* Medium green */
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: white;
+  }
+  
+  .logo-emoji {
+    font-size: 1.75rem;
+  }
+  
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  
+  /* Navigation Links */
+  .nav-links {
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .nav-item {
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: white;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .nav-item:hover {
+    background-color: #2F5233; /* Dark forest green */
+  }
+  
+  .nav-item.active {
+    background-color: #2F5233;
+    font-weight: 600;
+  }
+  
+  /* Saved Recipes Section */
+  .saved-recipes {
+    padding: 1.5rem;
+    border-top: 1px solid #557A59;
+  }
+  
+  .section-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #E8EDE4; /* Light sage */
+  }
+  
+  .saved-recipes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .saved-recipe-item {
+    color: #E8EDE4;
+    text-decoration: none;
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .saved-recipe-item:hover {
+    background-color: #2F5233;
+  }
+  
+  /* Auth Section */
+  .auth-section {
+    margin-top: auto;
+    padding: 1.5rem;
+    border-top: 1px solid #557A59;
+  }
+  
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .username {
+    font-size: 0.875rem;
+    color: #E8EDE4;
+  }
+  
+  .logout-button, .login-button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    text-align: left;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: block;
     width: 100%;
-}
-
-/* Add margin to main content to prevent navbar overlap */
-main {
-    margin-top: 4rem;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    .nav-container {
-        gap: 1rem;
+  }
+  
+  .logout-button:hover, .login-button:hover {
+    background-color: #2F5233;
+  }
+  
+  /* Main Content */
+  .main-content {
+    margin-left: 260px; /* Same as sidebar width */
+    padding: 2rem;
+    flex: 1;
+  }
+  
+  /* ChatBox Container */
+  .chat-box-container {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1000;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 200px;
     }
-    
-    .nav-tabs .nav-link {
-        padding: 0.5rem !important;
-        font-size: 0.9rem;
+  
+    .main-content {
+      margin-left: 200px;
     }
-}
-
-@media (max-width: 640px) {
-    .nav-tabs {
-        padding: 1rem;
+  
+    .logo-text {
+      font-size: 1.25rem;
     }
-
-    .nav-container {
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-}
+  }

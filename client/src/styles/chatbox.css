@@ -1,0 +1,233 @@
+/* ChefSpoonie Chatbox Styles - Accessible Design */
+:root {
+    --cream-bg: #FFF9F0;
+    --primary-teal: #2A9D8F;
+    --accent-orange: #E76F51;
+    --text-dark: #2C3E50;
+    --border-color: #E2E8F0;
+  }
+/* Base Chatbox Styles */
+.chatbox-container {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    width: 6rem; /* Smaller width */
+    height: 9rem; /* Smaller height */
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+/* Header Styles */
+.chatbox-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+}
+
+.chatbox-header h1 {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.chatbox-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.chatbox-close-btn:hover {
+    opacity: 0.8;
+}
+
+/* Messages Container */
+.chatbox-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0.75rem;
+    background-color: var(--background-color);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Accessibility: Improved contrast and readability */
+.message-content {
+    border-radius: 0.5rem;
+    padding: 0.625rem;
+    line-height: 1.5;
+    max-width: 85%;
+    word-wrap: break-word;
+    font-size: 0.875rem;
+}
+
+.message-user .message-content {
+    background-color: var(--primary-color);
+    color: white;
+    align-self: flex-end;
+}
+
+.message-ai .message-content {
+    background-color: var(--input-background);
+    color: var(--text-primary);
+    align-self: flex-start;
+    border: 1px solid var(--border-color);
+}
+
+.message-timestamp {
+    font-size: 0.75rem;
+    color: #666;
+    margin-top: 0.25rem;
+    text-align: right;
+}
+
+/* Loading Indicator */
+.loading-indicator {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    background-color: var(--input-background);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
+.loading-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    animation: bounce 1.5s infinite ease-in-out;
+}
+
+.loading-dot:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.loading-dot:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-100%); }
+}
+
+/* Input Area */
+.chatbox-input-area {
+    background-color: var(--background-color);
+    border-top: 1px solid var(--border-color);
+    padding: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chatbox-input {
+    flex-grow: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background-color: var(--input-background);
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.chatbox-input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+}
+
+.chatbox-send-btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.chatbox-send-btn:hover {
+    background-color: #0051cc; /* Darker blue for hover state */
+}
+
+.chatbox-send-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Recipe Card Styles */
+.recipe-card {
+    background-color: var(--input-background);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.recipe-card-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.recipe-card-image {
+    width: 100%;
+    height: 6rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.recipe-card-details {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Floating Chat Button */
+.chatbox-float-btn {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.chatbox-float-btn:hover {
+    background-color: #0051cc;
+    transform: scale(1.05);
+}
+
+/* Accessibility Improvements */
+.chatbox-container * {
+    outline-offset: 2px;
+}
+
+.chatbox-container *:focus {
+    outline: 2px solid var(--primary-color);
+}

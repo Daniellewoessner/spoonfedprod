@@ -1,10 +1,14 @@
-// components/Dashboard.tsx
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import RecipeCard from '../components/Recipecard';
 import { Recipe, Pairing } from '../interfaces/recipe';
 import '../styles/dashboard.css';
+import { useNavigate } from 'react-router-dom';
+import Auth from '../utils/auth';
+import ImageCapture from '../components/ImageCapture';
 
-const SPOONACULAR_API_KEY = 'e2537b3be41447b78c479963501a884b';
+
+
+const SPOONACULAR_API_KEY = 'd3b3d405a2914387bdbfd0ce59bdaca1';
 const COCKTAIL_API_KEY = 'ed394f7afdmshbb5c5a3c0efb5e2p109c0ajsn5aa3588aa1e5';
 const SPOONACULAR_BASE_URL = 'https://api.spoonacular.com/recipes';
 
@@ -20,6 +24,28 @@ const Dashboard: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
+  const navigate = useNavigate();
+
+  // Load saved recipes when component mounts
+  useEffect(() => {
+    const username = Auth.getUsername();
+    if (username) {
+      const storedRecipesKey = `savedRecipes_${(username as string).toLowerCase()}`;
+      const existingRecipesJson = localStorage.getItem(storedRecipesKey);
+      
+      if (existingRecipesJson) {
+        try {
+          const parsedRecipes = JSON.parse(existingRecipesJson);
+          if (Array.isArray(parsedRecipes)) {
+            setSavedRecipes(parsedRecipes);
+          }
+        } catch (error) {
+          console.error('Error parsing saved recipes:', error);
+        }
+      }
+    }
+  }, []);
 
   const handleIngredientChange = (e: ChangeEvent<HTMLInputElement>) => {
     setCurrentIngredient(e.target.value);
@@ -37,6 +63,14 @@ const Dashboard: React.FC = () => {
     setSelectedIngredients(selectedIngredients.filter(ing => ing !== ingredientToRemove));
   };
 
+  const handleIngredientsDetected = (detectedIngredients: string[]) => {
+    // Filter out any duplicates and add to selected ingredients
+    const newIngredients = detectedIngredients.filter(
+      ingredient => !selectedIngredients.includes(ingredient)
+    );
+    setSelectedIngredients([...selectedIngredients, ...newIngredients]);
+  };
+
   const searchRecipes = async (ingredients: string[]): Promise<Recipe[]> => {
     try {
       const ingredientsString = ingredients.join(',');
@@ -50,7 +84,6 @@ const Dashboard: React.FC = () => {
 
       const data = await response.json();
       return await Promise.all(data.map(async (item: any) => {
-        // Get full recipe details for each recipe
         const detailedRecipe = await getRecipeDetails(item.id.toString());
         const pairings = await getRecipePairings(item.id.toString());
         
@@ -108,7 +141,6 @@ const Dashboard: React.FC = () => {
     try {
       let pairings: Pairing[] = [];
 
-      // Fetch cocktail pairing
       const cocktailResponse = await fetch('https://the-cocktail-db.p.rapidapi.com/random.php', {
         headers: {
           'X-RapidAPI-Key': COCKTAIL_API_KEY,
@@ -130,7 +162,6 @@ const Dashboard: React.FC = () => {
         }
       }
 
-      // Fetch dessert from TheMealDB API
       const dessertResponse = await fetch('https://themealdb.p.rapidapi.com/filter.php?c=Dessert', {
         headers: {
           'X-RapidAPI-Key': COCKTAIL_API_KEY,
@@ -141,15 +172,13 @@ const Dashboard: React.FC = () => {
       if (dessertResponse.ok) {
         const dessertData = await dessertResponse.json();
         if (dessertData.meals && dessertData.meals.length > 0) {
-          // Get a random dessert from the list
           const randomIndex = Math.floor(Math.random() * dessertData.meals.length);
           const dessert = dessertData.meals[randomIndex];
 
-          // Fetch full dessert details
           const dessertDetailsResponse = await fetch(`https://themealdb.p.rapidapi.com/lookup.php?i=${dessert.idMeal}`, {
             headers: {
               'X-RapidAPI-Key': COCKTAIL_API_KEY,
-              'x-rapidapi-host': 'ghirardelli-chocolate-cookies-desserts-recipes-db.p.rapidapi.com'
+              'X-RapidAPI-Host': 'themealdb.p.rapidapi.com'
             }
           });
 
@@ -201,47 +230,60 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const handleSaveRecipe = async (recipe: Recipe) => {
+  const handleSaveRecipe = (recipe: Recipe) => {
     try {
-      const userId = localStorage.getItem('userId');
-      const token = localStorage.getItem('token');
-
-      console.log('User ID:', userId);
-      console.log('Token:', token);
-
-      if (!userId || !token) {
+      const username = Auth.getUsername();
+      if (!username) {
         setError('Please log in to save recipes');
         return;
       }
-
-      const response = await fetch('/api/user/save-recipe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          userId,
-          recipe: {
-            ...recipe,
-            savedAt: new Date().toISOString()
+  
+      // Use consistent key format with username from Auth
+      const storedRecipesKey = `savedRecipes_${username}`; // Remove toLowerCase()
+      let existingRecipes: Recipe[] = [];
+      
+      try {
+        const existingRecipesJson = localStorage.getItem(storedRecipesKey);
+        if (existingRecipesJson) {
+          existingRecipes = JSON.parse(existingRecipesJson);
+          if (!Array.isArray(existingRecipes)) {
+            existingRecipes = [];
           }
-        })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Server error:', errorData);
-        throw new Error('Failed to save recipe');
+        }
+      } catch (parseError) {
+        console.error('Error parsing stored recipes:', parseError);
+        existingRecipes = [];
       }
 
+      // Check if recipe already exists
+      const isAlreadySaved = existingRecipes.some(savedRecipe => 
+        savedRecipe.id === recipe.id
+      );
+      
+      if (isAlreadySaved) {
+        setError('Recipe is already saved');
+        return;
+      }
+
+      const savedRecipe = {
+        ...recipe,
+        savedAt: new Date().toISOString()
+      };
+
+      const updatedRecipes = [...existingRecipes, savedRecipe];
+      localStorage.setItem(storedRecipesKey, JSON.stringify(updatedRecipes));
+      setSavedRecipes(updatedRecipes);
       setError('Recipe saved successfully!');
       setTimeout(() => setError(null), 2000);
 
+      // Navigate after a short delay
+      setTimeout(() => {
+        navigate('/profile', { replace: false });
+      }, 500);
+
     } catch (error) {
-      console.error('Failed to save recipe:', error);
-      setError('Failed to save recipe');
-      setTimeout(() => setError(null), 2000);
+      console.error('Error in handleSaveRecipe:', error);
+      setError('An unexpected error occurred. Please try again.');
     }
   };
 
@@ -278,8 +320,11 @@ const Dashboard: React.FC = () => {
           <p>{error}</p>
         </div>
       )}
-
-      <div className="search-bar-container">
+      <div className="image-capture-container">
+  <h2 className="section-title">Take a Photo of Your Food</h2>
+  <ImageCapture onIngredientsDetected={handleIngredientsDetected} />
+</div>
+<div className="search-bar-container">
         <form onSubmit={handleAddIngredient}>
           <div className="input-group">
             <input
@@ -332,6 +377,7 @@ const Dashboard: React.FC = () => {
         <div className="recipe-grid">
           {recipes.slice(0, 6).map((recipe) => {
             const cocktailPairing = recipe.pairings?.find((pairing) => pairing.type === 'drink');
+            const isSaved = savedRecipes.some(savedRecipe => savedRecipe.id === recipe.id);
 
             return (
               <RecipeCard 
@@ -340,7 +386,7 @@ const Dashboard: React.FC = () => {
                 recipeId={recipe.id}
                 onSave={() => handleSaveRecipe(recipe)}
                 onDelete={() => {}} 
-                isSaved={false}
+                isSaved={isSaved}
                 showSaveDelete={true}
                 cocktailPairing={cocktailPairing}
               />

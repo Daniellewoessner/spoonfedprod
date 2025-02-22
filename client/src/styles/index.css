@@ -1,120 +1,180 @@
+:root {
+  --primary-green: #4A7856;    /* Sage green */
+  --secondary-green: #557A59;  /* Medium green */
+  --dark-green: #2F5233;      /* Dark forest green */
+  --light-green: #E8EDE4;     /* Light sage green */
+  --cream-bg: #F5F7F2;        /* Main cream background */
+  --light-cream: #FAFDF6;     /* Lighter cream */
+  --text-dark: #2F5233;       /* Dark green text */
+  --text-light: #FFFFFF;      /* White text */
+}
 
-  
-  body {
-    margin: 0;
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-    min-height: 100vh;
-  }
-  
-  /* Navigation styles */
-  nav {
-    background-color:var(--cream-bg);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  nav a {
-    color: var(--text-light);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  nav a:hover {
-    background-color: var(--secondary-red);
-    border-radius: 4px;
-  }
-  
-  /* Main content container */
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
+body {
+  margin: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+  background-color: var(--cream-bg);
+  color: var(--text-dark);
+}
+
+/* Navigation styles */
+nav {
+  background-color: var(--primary-green);
+  box-shadow: 0 2px 4px rgba(74, 120, 86, 0.1);
+}
+
+nav a {
+  color: var(--text-light);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+}
+
+nav a:hover {
+  background-color: var(--dark-green);
+  border-radius: 4px;
+  transform: translateY(-1px);
+}
+
+/* Main content container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Card styles for recipes */
+.recipe-card {
+  background: var(--light-cream);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(74, 120, 86, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  border: 1px solid var(--light-green);
+}
+
+.recipe-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(74, 120, 86, 0.15);
+  border-color: var(--primary-green);
+}
+
+/* Button styles */
+.button {
+  background-color: var(--primary-green);
+  color: var(--text-light);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.button:hover {
+  background-color: var(--dark-green);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(74, 120, 86, 0.2);
+}
+
+/* Input fields */
+input, select {
+  border: 2px solid var(--light-green);
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: var(--light-cream);
+  transition: all 0.3s ease;
+}
+
+input:focus, select:focus {
+  border-color: var(--primary-green);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(74, 120, 86, 0.2);
+}
+
+/* Headers */
+h1, h2, h3 {
+  color: var(--dark-green);
+}
+
+.ingredient-tag {
+  background-color: var(--light-green);
+  color: var(--dark-green);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  margin: 0.25rem;
+  display: inline-block;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.ingredient-tag:hover {
+  background-color: var(--primary-green);
+  color: var(--text-light);
+  transform: translateY(-1px);
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.loading-spinner {
+  border: 4px solid var(--light-green);
+  border-top: 4px solid var(--primary-green);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Additional utility classes */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(74, 120, 86, 0.1);
+}
+
+/* Success and error states */
+.success-message {
+  background-color: var(--light-green);
+  color: var(--dark-green);
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 4px solid var(--primary-green);
+}
+
+.error-message {
+  background-color: #FDF2F2;
+  color: #933232;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 4px solid #933232;
+}
+
+@media (max-width: 768px) {
+  .recipe-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     padding: 1rem;
   }
   
-  /* Card styles for recipes */
-  .recipe-card {
-    background: var(--text-light);
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    overflow: hidden;
-  }
-  
-  .recipe-card:hover {
-    transform: translateY(-5px);
-  }
-  
-  /* Button styles */
-  .button {
-    background-color: var(--primary-red);
-    color: var(--text-light);
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .button:hover {
-    background-color: var(--secondary-red);
-  }
-  
-  /* Input fields */
-  input, select {
-    border: 2px solid var(--secondary-yellow);
-    border-radius: 4px;
+  nav {
     padding: 0.5rem;
-    font-size: 1rem;
   }
   
-  input:focus, select:focus {
-    border-color: var(--primary-yellow);
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(255, 217, 61, 0.2);
+  .container {
+    padding: 0.5rem;
   }
-  
-  /* Headers */
-  h1, h2, h3 {
-    color: var(--primary-red);
-  }
-  
-  .ingredient-tag {
-    background-color: var(--primary-yellow);
-    color: var(--text-dark);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    margin: 0.25rem;
-    display: inline-block;
-  }
-  
-  .recipe-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2rem;
-    padding: 2rem 0;
-  }
-  
-  .loading-spinner {
-    border: 4px solid var(--secondary-yellow);
-    border-top: 4px solid var(--primary-red);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-  
-  @media (max-width: 768px) {
-    .recipe-grid {
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    }
-    
-    nav {
-      padding: 0.5rem;
-    }
-  }
+}

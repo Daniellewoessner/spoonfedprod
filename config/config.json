@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "daniellewoessner",
+    "password": null,
+    "database": "spoonfed_db",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "port": 5432
+  },
+  "test": {
+    "username": "daniellewoessner",
+    "password": null,
+    "database": "spoonfed_db_test",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "port": 5432
+  },
+  "production": {
+    "username": "daniellewoessner",
+    "password": null,
+    "database": "spoonfed_db_production",
+    "host": "127.0.0.1",
+    "dialect": "postgres",
+    "port": 5432
+  }
+}

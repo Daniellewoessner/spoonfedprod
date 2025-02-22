@@ -1,4 +1,5 @@
 export interface Recipe {
+  savedAt: string;
   matchingIngredients: string;
   sourceUrl: any;
   suggestedPairings: any;
@@ -34,6 +35,7 @@ export interface Recipe {
     avaliableIngredients?: string;
     currentUser: string;
     userId: string;
+    savedAt?: string;
 
   },
 

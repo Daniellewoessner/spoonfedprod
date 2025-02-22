@@ -1,197 +1,502 @@
-
 .profile-container {
-    background-color: #FFF9F0;
-    min-height: 100vh;
-    padding: 2rem 1rem;
-  }
-  
-  .profile-header {
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-  
-  .profile-avatar {
-    width: 120px;
-    height: 120px;
-    background-color: #E2E8F0;
-    border-radius: 50%;
-    margin: 0 auto 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 4px solid white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #4A7856; /* Light cream background */
+  min-height: 100vh;
+  padding: 2rem 1rem;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.profile-avatar {
+  width: 120px;
+  height: 120px;
+  background-color: #4A7856; /* Light sage green */
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4px solid white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-title {
+  color: #2F5233; /* Dark forest green */
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.profile-subtitle {
+  color: #557A59; /* Medium green */
+  font-size: 1.1rem;
+}
+
+.profile-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  padding: 0 1rem;
+}
+
+.profile-section {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #E8EDE4; /* Light sage green */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-title {
+  color: #2F5233; /* Dark forest green */
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.section-content {
+  padding: 1.5rem;
+}
+
+.profile-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.profile-label {
+  display: block;
+  color: #557A59; /* Medium green */
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.profile-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #E8EDE4; /* Light sage green */
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background-color: #FAFDF6; /* Very light cream */
+}
+
+.profile-input:focus {
+  outline: none;
+  border-color: #4A7856; /* Sage green */
+  box-shadow: 0 0 0 3px rgba(74, 120, 86, 0.1);
+}
+
+.profile-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.profile-button {
+  background-color: #4A7856; /* Sage green */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  border: none;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.profile-button:hover {
+  background-color: #2F5233; /* Dark forest green */
+}
+
+.profile-button.secondary {
+  background-color: transparent;
+  color: #4A7856; /* Sage green */
+  border: 1px solid #4A7856;
+}
+
+.profile-button.secondary:hover {
+  background-color: #F5F7F2; /* Light cream */
+}
+
+.preferences-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.preference-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.preference-checkbox {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 0.25rem;
+  border: 2px solid #4A7856; /* Sage green */
+  cursor: pointer;
+}
+
+.preference-label {
+  color: #557A59; /* Medium green */
+  font-size: 0.875rem;
+}
+
+.skill-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #E8EDE4; /* Light sage green */
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background-color: #FAFDF6; /* Very light cream */
+  cursor: pointer;
+}
+
+.success-message {
+  background-color: #E8F3E9; /* Light mint green */
+  color: #2F5233; /* Dark forest green */
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.error-message {
+  background-color: #F8E8E8; /* Light pink */
+  color: #933232; /* Dark red */
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.preferences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #557A59; /* Medium green */
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #4A7856; /* Sage green */
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+  background-color: #4A7856; /* Sage green */
+  border-color: #4A7856;
+}
+
+.saved-recipes-section {
+  grid-column: span 2;
+}
+
+.saved-recipes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.saved-recipe-card {
+  background: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #E8EDE4; /* Light sage green */
+}
+
+.saved-recipe-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.saved-recipe-details {
+  padding: 1rem;
+}
+
+.saved-recipe-title {
+  color: #2F5233; /* Dark forest green */
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.saved-recipe-date {
+  color: #557A59; /* Medium green */
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.saved-recipe-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.view-recipe-link {
+  color: #4A7856; /* Sage green */
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.view-recipe-link:hover {
+  text-decoration: underline;
+}
+
+.remove-saved-recipe {
+  color: #933232; /* Dark red */
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.remove-saved-recipe:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .profile-grid {
+    grid-template-columns: 1fr;
   }
   
   .profile-title {
-    color: #1A365D;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-  
-  .profile-subtitle {
-    color: #4A5568;
-    font-size: 1.1rem;
-  }
-  
-  .profile-grid {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 2rem;
-    padding: 0 1rem;
-  }
-  
-  .profile-section {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-  }
-  
-  .section-header {
-    padding: 1.5rem;
-    border-bottom: 1px solid #E2E8F0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .section-title {
-    color: #2D3748;
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 2rem;
   }
   
   .section-content {
-    padding: 1.5rem;
-  }
-  
-  .profile-form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  .profile-label {
-    display: block;
-    color: #4A5568;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-  
-  .profile-input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #E2E8F0;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    transition: border-color 0.2s;
-  }
-  
-  .profile-input:focus {
-    outline: none;
-    border-color: #3182CE;
-    box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
-  }
-  
-  .profile-textarea {
-    min-height: 100px;
-    resize: vertical;
-  }
-  
-  .profile-button {
-    background-color: #3182CE;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 500;
-    border: none;
-    transition: background-color 0.2s;
-    cursor: pointer;
-  }
-  
-  .profile-button:hover {
-    background-color: #2C5282;
-  }
-  
-  .profile-button.secondary {
-    background-color: transparent;
-    color: #3182CE;
-  }
-  
-  .profile-button.secondary:hover {
-    background-color: #EBF8FF;
-  }
-  
-  .preferences-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1rem;
-  }
-  
-  .preference-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .preference-checkbox {
-    width: 1rem;
-    height: 1rem;
-    border-radius: 0.25rem;
-    border: 2px solid #CBD5E0;
-    cursor: pointer;
-  }
-  
-  .preference-label {
-    color: #4A5568;
-    font-size: 0.875rem;
-  }
-  
-  .skill-select {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #E2E8F0;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-    background-color: white;
-    cursor: pointer;
-  }
-  
-  .success-message {
-    background-color: #ee5656;
-    color: #ee5656;
     padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    text-align: center;
   }
   
-  .error-message {
-    background-color: #FED7D7;
-    color: #9B2C2C;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
-    text-align: center;
+  .preferences-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+
+  .saved-recipes-section {
+    grid-column: span 1;
+  }
+}.saved-recipes-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.saved-recipes-header:hover {
+  background-color: #F5F7F2;
+}
+
+.collapse-icon {
+  transition: transform 0.3s ease;
+}
+
+.collapse-icon.open {
+  transform: rotate(180deg);
+}
+
+.saved-recipes-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.saved-recipes-content.open {
+  max-height: 2000px; /* Adjust this value based on your content */
+  transition: max-height 0.3s ease-in;
+}
+
+.toggle-button {
+  background: none;
+  border: none;
+  color: #4A7856;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s;
+}
+
+.toggle-button:hover {
+  background-color: #E8EDE4;
+}
+/* Add these styles to your CSS file */
+
+.blog-section {
+  margin-top: 2rem;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.blog-post-card {
+  background: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid #E8EDE4;
+  transition: transform 0.2s ease;
+}
+
+.blog-post-card:hover {
+  transform: translateY(-2px);
+}
+
+.blog-post-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.blog-post-content {
+  padding: 1.5rem;
+}
+
+.blog-post-title {
+  color: #2F5233;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.blog-post-date {
+  color: #557A59;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.blog-post-excerpt {
+  color: #4A5568;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.blog-post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.blog-tag {
+  background-color: #E8EDE4;
+  color: #2F5233;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.blog-post-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #E8EDE4;
+}
+
+.edit-button,
+.delete-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.edit-button {
+  color: #4A7856;
+  background-color: #E8EDE4;
+  border: none;
+}
+
+.edit-button:hover {
+  background-color: #D1DCD4;
+}
+
+.delete-button {
+  color: #933232;
+  background-color: #FDF2F2;
+  border: none;
+}
+
+.delete-button:hover {
+  background-color: #FDE8E8;
+}
+
+.blog-editor {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.editor-title {
+  color: #2F5233;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.no-posts {
+  text-align: center;
+  color: #557A59;
+  padding: 2rem;
+  background: #F5F7F2;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .blog-grid {
+    grid-template-columns: 1fr;
   }
   
-  @media (max-width: 768px) {
-    .profile-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .profile-title {
-      font-size: 2rem;
-    }
-    
-    .section-content {
-      padding: 1rem;
-    }
-    
-    .preferences-list {
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    }
+  .button-group {
+    flex-direction: column;
   }
+  
+  .blog-post-actions {
+    flex-direction: column;
+  }
+}

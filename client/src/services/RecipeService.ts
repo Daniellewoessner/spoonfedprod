@@ -44,10 +44,12 @@ export const getRecipeDetails = async (recipeId: string): Promise<Recipe> => {
       pairings: [] // Will be populated with combined pairings
       ,
 
+
       searchMode: false,
       handleIngredientSearch: undefined,
       sourceUrl: undefined,
       matchingIngredients: data,
+      savedAt: ''
     };
 
     // Fetch pairings asynchronously
@@ -124,6 +126,7 @@ export const searchRecipes = async (ingredients: string[]): Promise<Recipe[]> =>
       searchMode: true,
       sourceUrl: undefined,
       matchingIngredients: '',
+      savedAt: ''
     }));
 
   } catch (error) {

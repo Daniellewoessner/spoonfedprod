@@ -60,7 +60,7 @@ const MainPage: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <h3 className="feature-title">Quick Discovery</h3>
-            <p className="feature-description">Find recipes in just a few clicks</p>
+            <p className="feature-description">Find out what other cooking!</p>
           </Link>
         </div>
       </div>

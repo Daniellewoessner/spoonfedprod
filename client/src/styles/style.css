@@ -1,15 +1,15 @@
 /* Base styles */
 :root {
-    --primary-teal: #2A9D8F;    /* Main teal */
-    --secondary-teal: #64C2B5;  /* Lighter teal for accents */
-    --primary-red: #E63946;     /* Bright red */
-    --primary-orange: #F77F00;  /* Warm orange */
-    --cream: #F5EBE0;          /* Main cream color */
-    --light-cream: #FAF6F1;    /* Lighter cream for backgrounds */
-    --dark-cream: #E3D5CA;     /* Darker cream for accents */
-    --text-dark: #264653;      /* Dark teal for text */
-    --text-light: #FFFFFF;     /* White text */
-    --secondary-red: #df4854     /* lighter red*/
+    --primary-green: #4A7856;    /* Sage green */
+    --secondary-green: #557A59;  /* Medium green */
+    --dark-green: #2F5233;      /* Dark forest green */
+    --light-green: #E8EDE4;     /* Light sage green */
+    --cream: #F5F7F2;           /* Main cream color */
+    --light-cream: #FAFDF6;     /* Lighter cream for backgrounds */
+    --dark-cream: #E8EDE4;      /* Darker cream for accents */
+    --text-dark: #2F5233;       /* Dark green for text */
+    --text-light: #FFFFFF;      /* White text */
+    --success-green: #3C6E44    /* Darker green for success states */
 }
 
 body {
@@ -17,12 +17,13 @@ body {
     font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
     background-color: var(--light-cream);
     min-height: 100vh;
+    color: var(--text-dark);
 }
 
 /* Navigation styles */
 nav {
-    background-color: var(--primary-red);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-green);
+    box-shadow: 0 2px 4px rgba(74, 120, 86, 0.1);
 }
 
 nav a {
@@ -33,7 +34,7 @@ nav a {
 }
 
 nav a:hover {
-    background-color: var(--secondary-red);
+    background-color: var(--dark-green);
     border-radius: 4px;
 }
 
@@ -46,36 +47,38 @@ nav a:hover {
 
 /* Card styles for recipes */
 .recipe-card {
-    background: var(--cream);
+    background: var(--light-cream);
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(74, 120, 86, 0.1);
     transition: transform 0.3s ease;
     overflow: hidden;
-    border: 1px solid var(--dark-cream);
+    border: 1px solid var(--light-green);
 }
 
 .recipe-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(74, 120, 86, 0.15);
 }
 
 /* Button styles */
 .button {
-    background-color: var(--primary-red);
+    background-color: var(--primary-green);
     color: var(--text-light);
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .button:hover {
-    background-color: var(--primary-orange);
+    background-color: var(--dark-green);
+    transform: translateY(-1px);
 }
 
 /* Input fields */
 input, select {
-    border: 2px solid var(--dark-cream);
+    border: 2px solid var(--light-green);
     border-radius: 4px;
     padding: 0.5rem;
     font-size: 1rem;
@@ -83,25 +86,31 @@ input, select {
 }
 
 input:focus, select:focus {
-    border-color: var(--secondary-red);
+    border-color: var(--primary-green);
     outline: none;
-    box-shadow: 0 0 0 2px rgba(42, 157, 143, 0.2);
+    box-shadow: 0 0 0 2px rgba(74, 120, 86, 0.2);
 }
 
 /* Headers */
 h1, h2, h3 {
-    color: var(--secondary-red);
+    color: var(--dark-green);
 }
 
 /* Tags/Pills for ingredients */
 .ingredient-tag {
-    background-color: var(--primary-orange);
-    color: var(--text-light);
+    background-color: var(--light-green);
+    color: var(--dark-green);
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.875rem;
     margin: 0.25rem;
     display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.ingredient-tag:hover {
+    background-color: var(--primary-green);
+    color: var(--text-light);
 }
 
 /* Grid layout for recipe cards */
@@ -114,8 +123,8 @@ h1, h2, h3 {
 
 /* Animation for loading states */
 .loading-spinner {
-    border: 4px solid var(--cream);
-    border-top: 4px solid var(--primary-teal);
+    border: 4px solid var(--light-green);
+    border-top: 4px solid var(--primary-green);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -129,23 +138,52 @@ h1, h2, h3 {
 
 /* Secondary button style */
 .button-secondary {
-    background-color: var(--primary-teal);
+    background-color: var(--secondary-green);
     color: var(--text-light);
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .button-secondary:hover {
-    background-color: var(--secondary-teal);
+    background-color: var(--dark-green);
+    transform: translateY(-1px);
 }
 
 /* Accent elements */
 .accent-border {
-    border-left: 4px solid var(--primary-orange);
+    border-left: 4px solid var(--primary-green);
     padding-left: 1rem;
+}
+
+/* Success states */
+.success-message {
+    background-color: var(--light-green);
+    color: var(--dark-green);
+    padding: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid var(--success-green);
+}
+
+/* Error states */
+.error-message {
+    background-color: #FDF2F2;
+    color: #933232;
+    padding: 1rem;
+    border-radius: 4px;
+    border-left: 4px solid #933232;
+}
+
+/* Hover effects */
+.hover-effect {
+    transition: all 0.3s ease;
+}
+
+.hover-effect:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(74, 120, 86, 0.1);
 }
 
 /* Responsive design */
