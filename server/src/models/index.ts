@@ -5,18 +5,17 @@ import { Sequelize, Options } from "sequelize";
 import { UserGenerator } from "./user.js";
 
 const sequelize_options: Options = {
-  host: "localhost",
   dialect: "postgres",
   dialectOptions: {
     decimalNumbers: true,
   },
 };
 
-const sequelize = process.env.DB_URL
-  ? new Sequelize(process.env.DB_URL as string, {
-      ...sequelize_options,
+const sequelize = process.env.EXTERNALDB
+  ? new Sequelize(process.env.EXTERNALDB, {
+      dialect: "postgres",
       dialectOptions: {
-        ...sequelize_options.dialectOptions,
+        decimalNumbers: true,
         ssl: {
           require: true,
           rejectUnauthorized: false,
@@ -27,7 +26,10 @@ const sequelize = process.env.DB_URL
       process.env.DB_NAME || "",
       process.env.LOCAL_DB_USER || "",
       process.env.DB_PASSWORD,
-      sequelize_options
+      {
+        ...sequelize_options,
+        host: "localhost",
+      }
     );
 
 const User = UserGenerator(sequelize);
