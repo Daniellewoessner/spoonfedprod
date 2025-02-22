@@ -23,7 +23,7 @@ type Recipe = {
 };
 
 type ChatBoxProps = {
-  spoonacularApiKey: string;
+  spoonacularApiKey?: string;
   maxMessages?: number;
   theme?: 'light' | 'dark';
 };
@@ -81,7 +81,6 @@ const RecipeCard = ({ recipe }: RecipeCardProps): JSX.Element => (
 );
 
 const ChatBox = ({ 
-  spoonacularApiKey, 
   maxMessages = 50,
 }: ChatBoxProps): JSX.Element => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -124,32 +123,14 @@ const ChatBox = ({
     recipeData?: Recipe[];
   }> => {
     try {
-      const recipeKeywords = ['recipe', 'cook', 'make', 'prepare', 'how to'];
-      const isRecipeQuery = recipeKeywords.some(keyword => 
-        text.toLowerCase().includes(keyword)
-      );
-
-      let endpoint = 'https://api.spoonacular.com/';
+      const endpoint = 'https://api.spoonacular.com/recipes/complexSearch';
       const params: Record<string, string | number | boolean> = { 
-        apiKey: spoonacularApiKey 
+        apiKey: 'f7f0e2e2a2df49f2801f40761e2c8154',
+        query: text,
+        addRecipeInformation: true,
+        number: 3,
+        instructionsRequired: true
       };
-
-      if (isRecipeQuery) {
-        endpoint += 'recipes/complexSearch';
-        Object.assign(params, {
-          query: text,
-          addRecipeInformation: true,
-          number: 3,
-          instructionsRequired: true,
-          fillIngredients: true
-        });
-      } else {
-        endpoint += 'food/converse';
-        Object.assign(params, {
-          text: text,
-          contextId: 'cooking-chat'
-        });
-      }
 
       const queryParams = new URLSearchParams(
         Object.entries(params).map(([key, value]) => [key, String(value)])
@@ -168,24 +149,27 @@ const ChatBox = ({
 
       const data = await response.json();
       
-      if (isRecipeQuery) {
-        if (!data.results?.length) {
-          return {
-            text: "I couldn't find any recipes matching your request. Could you try rephrasing or being more specific?",
-            isRecipe: false
-          };
-        }
+      if (!data.results?.length) {
         return {
-          text: `Here are some recipes I found for you:`,
-          isRecipe: true,
-          recipeData: data.results
+          text: "I couldn't find any recipes matching your request. Could you try rephrasing or being more specific?",
+          isRecipe: false
         };
       }
 
       return {
-        text: data.answerText || "I'm not sure about that. Try asking about specific recipes!",
-        isRecipe: false
+        text: `Here are some recipes I found for you:`,
+        isRecipe: true,
+        recipeData: data.results.map((recipe: { id: any; title: any; image: any; sourceUrl: any; readyInMinutes: any; servings: any; healthScore: any; }) => ({
+          id: recipe.id,
+          title: recipe.title,
+          image: recipe.image,
+          sourceUrl: recipe.sourceUrl,
+          readyInMinutes: recipe.readyInMinutes,
+          servings: recipe.servings,
+          healthScore: recipe.healthScore
+        }))
       };
+
     } catch (error) {
       console.error('API Request failed:', error);
       throw new Error('Sorry, I had trouble accessing my cookbook. Please try again in a moment.');
@@ -194,7 +178,7 @@ const ChatBox = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!inputMessage.trim() || !spoonacularApiKey || isLoading) return;
+    if (!inputMessage.trim()) return;
 
     const userMessage: Message = {
       id: crypto.randomUUID(),
@@ -313,12 +297,12 @@ const ChatBox = ({
             onChange={(e) => setInputMessage(e.target.value)}
             placeholder="Ask ChefSpoonie..."
             className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 placeholder-gray-400"
-            disabled={!spoonacularApiKey || isLoading}
+            disabled={isLoading}
           />
           <button
             type="submit"
             className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-            disabled={!spoonacularApiKey || isLoading || !inputMessage.trim()}
+            disabled={isLoading || !inputMessage.trim()}
             aria-label="Send message"
           >
             <Send className="w-5 h-5" />

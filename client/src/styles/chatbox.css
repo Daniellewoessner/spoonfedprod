@@ -11,8 +11,8 @@
     position: fixed;
     bottom: 1rem;
     right: 1rem;
-    width: 6rem; /* Smaller width */
-    height: 9rem; /* Smaller height */
+    width: 12rem; /* Smaller width */
+    height: 18rem; /* Smaller height */
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;

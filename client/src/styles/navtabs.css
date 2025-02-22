@@ -1,13 +1,41 @@
-.app-container {
-    display: flex;
-    min-height: 100vh;
-    background-color: #F5F7F2; /* Light cream background */
+
+  
+  /* Mobile Menu Toggle */
+  .mobile-menu-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1002;
+    background-color: #4A7856;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .mobile-menu-toggle:hover {
+    background-color: #2F5233;
+  }
+  
+  /* Mobile Overlay */
+  .mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
   }
   
   /* Sidebar Styles */
   .sidebar {
     width: 260px;
-    background-color: #4A7856; /* Sage green */
+    background-color: #4A7856;
     color: white;
     position: fixed;
     height: 100vh;
@@ -16,11 +44,13 @@
     display: flex;
     flex-direction: column;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    transition: transform 0.3s ease;
   }
   
   .sidebar-header {
     padding: 1.5rem;
-    border-bottom: 1px solid #557A59; /* Medium green */
+    border-bottom: 1px solid #557A59;
   }
   
   .logo {
@@ -57,7 +87,7 @@
   }
   
   .nav-item:hover {
-    background-color: #2F5233; /* Dark forest green */
+    background-color: #2F5233;
   }
   
   .nav-item.active {
@@ -75,7 +105,7 @@
     font-size: 0.875rem;
     font-weight: 600;
     margin-bottom: 1rem;
-    color: #E8EDE4; /* Light sage */
+    color: #E8EDE4;
   }
   
   .saved-recipes-list {
@@ -138,9 +168,14 @@
   
   /* Main Content */
   .main-content {
-    margin-left: 260px; /* Same as sidebar width */
+    margin-left: 260px;
     padding: 2rem;
     flex: 1;
+    transition: filter 0.3s ease;
+  }
+  
+  .main-content.blur {
+    filter: blur(4px);
   }
   
   /* ChatBox Container */
@@ -151,17 +186,103 @@
     z-index: 1000;
   }
   
-  /* Responsive Design */
+  /* Mobile Responsive Design */
   @media (max-width: 768px) {
+    .mobile-menu-toggle {
+      display: block;
+    }
+  
+    .mobile-overlay {
+      display: block;
+    }
+  
     .sidebar {
-      width: 200px;
+      transform: translateX(-100%);
+      width: 80%;
+      max-width: 300px;
+    }
+  
+    .sidebar.mobile-open {
+      transform: translateX(0);
     }
   
     .main-content {
-      margin-left: 200px;
+      margin-left: 0;
+      padding: 1rem;
     }
   
     .logo-text {
       font-size: 1.25rem;
     }
+  
+    .logo-emoji {
+      font-size: 1.5rem;
+    }
+  
+    /* Adjust ChatBox position for mobile */
+    .chat-box-container {
+      bottom: 1rem;
+      right: 1rem;
+      width: calc(100% - 2rem);
+      max-width: 400px;
+    }
+  }
+  
+  /* Small Mobile Screens */
+  @media (max-width: 480px) {
+    .sidebar {
+      width: 85%;
+    }
+  
+    .sidebar-header {
+      padding: 1rem;
+    }
+  
+    .nav-links {
+      padding: 1rem;
+    }
+  
+    .saved-recipes {
+      padding: 1rem;
+    }
+  
+    .auth-section {
+      padding: 1rem;
+    }
+  
+    .nav-item {
+      padding: 0.5rem 0.75rem;
+    }
+  
+    .logo-text {
+      font-size: 1.125rem;
+    }
+  
+    /* Further optimize ChatBox for very small screens */
+    .chat-box-container {
+      width: calc(100% - 1rem);
+      right: 0.5rem;
+      bottom: 0.5rem;
+    }
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;  /* Space between emoji and text */
+    background-color: #2F5233;  /* Darker background for the logo area */
+    padding: 0.75rem;  /* Even padding around the logo */
+    border-radius: 0.5rem;  /* Rounded corners */
+    margin: 0.5rem;  /* Space around the entire logo container */
+  }
+  
+  .logo-emoji {
+    font-size: 1.75rem;
+    display: flex;  /* Ensures emoji is properly centered */
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 700;
   }

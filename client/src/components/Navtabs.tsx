@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { Menu, X } from 'lucide-react'; // Import icons if you have lucide-react
 import ChatBox from "../components/chatbox";
 import AuthService, { StorageKeys } from "../utils/auth";
 import '../styles/navtabs.css';
@@ -17,7 +18,7 @@ const Navtabs = () => {
   const [username, setUsername] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [savedRecipes, setSavedRecipes] = useState<Recipe[]>([]);
-
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const SPOONACULAR_API_KEY = process.env.REACT_APP_SPOONACULAR_API_KEY || "";
 
   useEffect(() => {
@@ -38,7 +39,6 @@ const Navtabs = () => {
         }
       }
     };
-
     checkAuthAndLoadData();
   }, []);
 
@@ -47,14 +47,33 @@ const Navtabs = () => {
     setIsLoggedIn(false);
     setUsername("");
     setSavedRecipes([]);
+    setIsMobileMenuOpen(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Close mobile menu when clicking a link
+  const handleNavClick = () => {
+    setIsMobileMenuOpen(false);
   };
 
   return (
     <div className="app-container">
+      {/* Mobile Menu Toggle Button */}
+      <button 
+        className="mobile-menu-toggle"
+        onClick={toggleMobileMenu}
+        aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+      >
+        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
       {/* Sidebar Navigation */}
-      <nav className="sidebar">
+      <nav className={`sidebar ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
         <div className="sidebar-header">
-          <Link to="/" className="logo">
+          <Link to="/" className="logo" onClick={handleNavClick}>
             <span className="logo-emoji">🍽️</span>
             <span className="logo-text">SpoonFed</span>
           </Link>
@@ -64,6 +83,7 @@ const Navtabs = () => {
           <Link
             to="/"
             className={`nav-item ${currentPage === "/" ? "active" : ""}`}
+            onClick={handleNavClick}
           >
             Home
           </Link>
@@ -73,6 +93,7 @@ const Navtabs = () => {
               <Link
                 to="/dashboard"
                 className={`nav-item ${currentPage === "/dashboard" ? "active" : ""}`}
+                onClick={handleNavClick}
               >
                 Recipes
               </Link>
@@ -80,6 +101,7 @@ const Navtabs = () => {
               <Link
                 to="/profile"
                 className={`nav-item ${currentPage === "/profile" ? "active" : ""}`}
+                onClick={handleNavClick}
               >
                 Profile
               </Link>
@@ -96,6 +118,7 @@ const Navtabs = () => {
                   key={recipe.id}
                   to={`/recipe/${recipe.id}`}
                   className="saved-recipe-item"
+                  onClick={handleNavClick}
                 >
                   {recipe.title}
                 </Link>
@@ -113,15 +136,23 @@ const Navtabs = () => {
               </button>
             </div>
           ) : (
-            <Link to="/login" className="login-button">
+            <Link to="/login" className="login-button" onClick={handleNavClick}>
               Login
             </Link>
           )}
         </div>
       </nav>
 
+      {/* Overlay for mobile menu */}
+      {isMobileMenuOpen && (
+        <div 
+          className="mobile-overlay"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Main Content */}
-      <main className="main-content">
+      <main className={`main-content ${isMobileMenuOpen ? 'blur' : ''}`}>
         {/* Your page content will be rendered here */}
       </main>
 
