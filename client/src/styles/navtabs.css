@@ -1,9 +1,4 @@
-.app-container {
-    display: flex;
-    min-height: 100vh;
-    background-color: #F5F7F2; /* Light cream background */
-  }
-  
+
   /* Sidebar Styles */
   .sidebar {
     width: 260px;
