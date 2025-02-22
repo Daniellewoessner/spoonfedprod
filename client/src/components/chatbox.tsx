@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, ChefHat, ExternalLink } from 'lucide-react';
-
+import '../styles/chatbox.css';
 type Message = {
   id: string;
   text: string;
@@ -222,15 +222,25 @@ const ChatBox = ({
     );
   }
 
+  const handleClose = (event: React.MouseEvent<HTMLButtonElement>): void => {
+    event.preventDefault();
+    setIsOpen(false);
+    setInputMessage('');
+    setError(null);
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  };
   return (
-    <div className="w-80 h-[450px] rounded-lg shadow-xl bg-white overflow-hidden flex flex-col z-50 border border-gray-200">
-      <div className="bg-white border-b border-gray-200 p-3 flex justify-between items-center">
+    <div className="fixed bottom-4 right-4 w-[80vw] sm:w-80 h-[400px] sm:h-[450px] rounded-lg shadow-xl bg-white flex flex-col z-50 border border-gray-200">
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200 p-2 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <ChefHat className="w-6 h-6 text-blue-600" />
-          <h1 className="text-base font-semibold text-gray-800">ChefSpoonie</h1>
+          <ChefHat className="w-5 h-5 text-blue-600" />
+          <h1 className="text-sm font-semibold text-gray-800">ChefSpoonie</h1>
         </div>
         <button 
-          onClick={() => setIsOpen(false)}
+          onClick={handleClose}
           className="text-gray-500 hover:text-gray-700 transition-colors"
           aria-label="Close chat"
         >
@@ -238,7 +248,15 @@ const ChatBox = ({
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-gray-50">
+      {/* Message container with custom scrollbar */}
+      <div 
+        className="flex-1 overflow-y-scroll overflow-x-auto p-2 space-y-2 bg-gray-50 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100" 
+        style={{ 
+          height: 'calc(100% - 120px)',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#CBD5E1 #F1F5F9'
+        }}
+      >
         {messages.map((message) => (
           <div
             key={message.id}
@@ -263,7 +281,7 @@ const ChatBox = ({
                   ))}
                 </div>
               )}
-              <span className="text-xs opacity-70 mt-1 block">
+              <span className="text-[10px] opacity-70 mt-1 block">
                 {message.timestamp}
               </span>
             </div>
@@ -273,42 +291,55 @@ const ChatBox = ({
           <div className="flex justify-start">
             <div className="bg-white shadow-sm border border-gray-200 rounded-lg p-2">
               <div className="flex gap-1">
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" />
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-100" />
-                <div className="w-2 h-2 bg-blue-500 rounded-full animate-bounce delay-200" />
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce" />
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-100" />
+                <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-bounce delay-200" />
               </div>
             </div>
           </div>
         )}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-600 p-2 rounded-lg text-sm">
+          <div className="bg-red-50 border border-red-200 text-red-600 p-2 rounded-lg text-xs">
             {error}
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="p-3 bg-white border-t border-gray-200">
-        <div className="flex gap-2">
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
-            placeholder="Ask ChefSpoonie..."
-            className="flex-1 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-800 placeholder-gray-400"
-            disabled={isLoading}
-          />
-          <button
-            type="submit"
-            className="bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-            disabled={isLoading || !inputMessage.trim()}
-            aria-label="Send message"
-          >
-            <Send className="w-5 h-5" />
-          </button>
-        </div>
-      </form>
+      {/* Form with close button */}
+      <div className="mt-auto">
+        <form onSubmit={handleSubmit} className="p-2 bg-white border-t border-gray-200">
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-2">
+              <input
+                ref={inputRef}
+                type="text"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                placeholder="Ask ChefSpoonie..."
+                className="flex-1 p-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                disabled={isLoading}
+              />
+              <button
+                type="submit"
+                className="p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                disabled={isLoading || !inputMessage.trim()}
+                aria-label="Send message"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+            
+            <button
+              type="button"
+              onClick={handleClose}
+              className="w-full py-1.5 text-sm text-gray-600 hover:text-gray-800 transition-colors border border-gray-200 rounded-lg hover:bg-gray-50"
+            >
+              Close Chat
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

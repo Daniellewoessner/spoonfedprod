@@ -180,13 +180,13 @@
 }
 
 .recipe-card-title {
-    font-weight: 600;
+    font-weight: 300;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
 
 .recipe-card-image {
-    width: 100%;
+    width: 30%;
     height: 6rem;
     object-fit: cover;
     border-radius: 0.5rem;
@@ -225,9 +225,30 @@
 
 /* Accessibility Improvements */
 .chatbox-container * {
-    outline-offset: 2px;
+    outline-offset: 25px;
+    margin-top: 30px;
 }
 
 .chatbox-container *:focus {
     outline: 2px solid var(--primary-color);
 }
+
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #F1F5F9;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
