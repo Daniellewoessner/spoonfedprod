@@ -1,8 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { Camera, RefreshCcw, X, RotateCw } from 'lucide-react';
-import '../styles/ImageCapture.css'
-
-
+import React, { useState, useRef, useEffect } from 'react';
+import { Camera, X, RotateCw, ChefHat } from 'lucide-react';
 
 const SPOONACULAR_API_KEY = 'd3b3d405a2914387bdbfd0ce59bdaca1';
 
@@ -15,57 +12,103 @@ const ImageCapture: React.FC<ImageCaptureProps> = ({ onIngredientsDetected }) =>
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [detectedIngredients, setDetectedIngredients] = useState<string[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
+  // Cleanup function for camera stream
+  const cleanupCamera = () => {
+    if (streamRef.current) {
+      const tracks = streamRef.current.getTracks();
+      tracks.forEach(track => {
+        track.stop();
+      });
+      streamRef.current = null;
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+  };
+
+  // Cleanup on component unmount
+  useEffect(() => {
+    return () => {
+      cleanupCamera();
+    };
+  }, []);
+
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode },
+      // Clean up any existing stream first
+      cleanupCamera();
+
+      const constraints = {
+        video: {
+          facingMode,
+          width: { ideal: 1920 },
+          height: { ideal: 1080 }
+        },
         audio: false
-      });
+      };
+
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        await videoRef.current.play(); // Ensure video is playing
         streamRef.current = stream;
+        setShowCamera(true);
       }
-      setShowCamera(true);
     } catch (err) {
       console.error('Error accessing camera:', err);
-      // Fallback to file input if camera access fails
-      if (fileInputRef.current) {
-        fileInputRef.current.click();
-      }
+      alert('Failed to access camera. Please ensure camera permissions are granted.');
     }
   };
 
   const stopCamera = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
-    }
+    cleanupCamera();
     setShowCamera(false);
   };
 
-  const switchCamera = () => {
-    stopCamera();
+  const switchCamera = async () => {
     setFacingMode(prev => prev === 'user' ? 'environment' : 'user');
-    startCamera();
+    cleanupCamera();
+    await startCamera();
   };
 
   const capturePhoto = async () => {
-    if (!videoRef.current) return;
+    if (!videoRef.current || !streamRef.current) {
+      console.error('Video stream not ready');
+      return;
+    }
 
-    const canvas = document.createElement('canvas');
-    canvas.width = videoRef.current.videoWidth;
-    canvas.height = videoRef.current.videoHeight;
-    
-    const context = canvas.getContext('2d');
-    if (context) {
+    try {
+      // Wait for video to be ready
+      await new Promise((resolve) => {
+        if (videoRef.current?.readyState === videoRef.current?.HAVE_ENOUGH_DATA) {
+          resolve(true);
+        } else {
+          videoRef.current?.addEventListener('loadeddata', () => resolve(true), { once: true });
+        }
+      });
+
+      const canvas = document.createElement('canvas');
+      canvas.width = videoRef.current.videoWidth;
+      canvas.height = videoRef.current.videoHeight;
+      
+      const context = canvas.getContext('2d');
+      if (!context) {
+        throw new Error('Could not get canvas context');
+      }
+
+      // Capture the frame
       context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-      const imageData = canvas.toDataURL('image/jpeg');
+      
+      // Convert to base64
+      const imageData = canvas.toDataURL('image/jpeg', 0.8);
       setImageUrl(imageData);
+      
+      // Stop the camera stream
       stopCamera();
 
       // Analyze the captured image
@@ -87,74 +130,38 @@ const ImageCapture: React.FC<ImageCaptureProps> = ({ onIngredientsDetected }) =>
         if (!response.ok) throw new Error('Failed to analyze image');
         
         const data = await response.json();
-        const detectedIngredients = data.annotations
+        const ingredients = data.annotations
           .filter((item: { probability: number; }) => item.probability > 0.5)
           .map((item: { annotation: any; }) => item.annotation);
         
-        onIngredientsDetected(detectedIngredients);
+        setDetectedIngredients(ingredients);
+        onIngredientsDetected(ingredients);
       } catch (error) {
         console.error('Error analyzing image:', error);
+        alert('Failed to analyze image. Please try again.');
       } finally {
         setIsAnalyzing(false);
       }
-    }
-  };
-
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (!files || files.length === 0) return;
-    const file = files[0];
-    if (!file) return;
-    
-    setIsAnalyzing(true);
-    
-    try {
-      const previewUrl = URL.createObjectURL(file);
-      setImageUrl(previewUrl);
-      
-      const base64Image = await convertToBase64(file) as string;
-      
-      const response = await fetch(
-        `https://api.spoonacular.com/food/images/analyze?apiKey=${SPOONACULAR_API_KEY}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            imageBase64: base64Image.split(',')[1]
-          })
-        }
-      );
-      
-      if (!response.ok) throw new Error('Failed to analyze image');
-      
-      const data = await response.json();
-      const detectedIngredients = data.annotations
-        .filter((item: { probability: number; }) => item.probability > 0.5)
-        .map((item: { annotation: any; }) => item.annotation);
-      
-      onIngredientsDetected(detectedIngredients);
     } catch (error) {
-      console.error('Error analyzing image:', error);
-    } finally {
-      setIsAnalyzing(false);
+      console.error('Error capturing photo:', error);
+      alert('Failed to capture photo. Please try again.');
     }
-  };
-
-  const convertToBase64 = (file: Blob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
   };
 
   const retakePhoto = () => {
     setImageUrl(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+    setDetectedIngredients([]);
+    startCamera();
+  };
+
+  const handleClose = () => {
+    stopCamera();
+    setShowCamera(false);
+  };
+
+  const handleGetRecipe = () => {
+    if (detectedIngredients.length > 0) {
+      onIngredientsDetected(detectedIngredients);
     }
   };
 
@@ -165,7 +172,7 @@ const ImageCapture: React.FC<ImageCaptureProps> = ({ onIngredientsDetected }) =>
           <div className="p-4 border-b flex justify-between items-center">
             <h3 className="text-lg font-semibold">Take a Photo</h3>
             <button 
-              onClick={() => setShowCamera(false)}
+              onClick={handleClose}
               className="text-gray-500 hover:text-gray-700"
             >
               <X className="w-6 h-6" />
@@ -177,6 +184,7 @@ const ImageCapture: React.FC<ImageCaptureProps> = ({ onIngredientsDetected }) =>
               ref={videoRef}
               autoPlay
               playsInline
+              muted
               className="w-full h-full object-cover"
             />
           </div>
@@ -201,63 +209,57 @@ const ImageCapture: React.FC<ImageCaptureProps> = ({ onIngredientsDetected }) =>
     );
   }
 
-
   return (
-    <div className="image-capture-container">
-      <div className="preview-container">
+    <div className="flex flex-col items-center gap-4 p-4">
+      <div className="w-full max-w-md aspect-[4/3] bg-gray-100 rounded-lg overflow-hidden">
         {imageUrl ? (
           <img 
             src={imageUrl} 
             alt="Captured food" 
-            className="preview-image"
+            className="w-full h-full object-cover"
           />
         ) : (
-          <div className="preview-placeholder">
-            <Camera className="w-6 h-6" />
+          <div className="w-full h-full flex flex-col items-center justify-center text-gray-500">
+            <Camera className="w-12 h-12 mb-2" />
             <p>Take a photo of your ingredients</p>
           </div>
         )}
       </div>
       
-      <div className="button-container">
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFileUpload}
-          className="hidden"
-          id="file-input"
-        />
-        
+      <div className="flex flex-col items-center gap-4 w-full max-w-md">
         <button 
-          onClick={startCamera}
-          className="camera-button"
+          onClick={imageUrl ? retakePhoto : startCamera}
+          className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
         >
-          <Camera className="w-4 h-4" />
-          {imageUrl ? 'Take Another' : 'Take Photo'}
+          <Camera className="w-5 h-5" />
+          {imageUrl ? 'Take Another Photo' : 'Take Photo'}
         </button>
-  
-        <label 
-          htmlFor="file-input"
-          className="upload-button"
-        >
-          Upload Image
-        </label>
-        
-        {imageUrl && (
-          <button
-            onClick={retakePhoto}
-            className="reset-button"
+
+        {imageUrl && !isAnalyzing && detectedIngredients.length > 0 && (
+          <button 
+            onClick={handleGetRecipe}
+            className="w-full px-4 py-2 bg-green-600 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-green-700 transition-colors"
           >
-            <RefreshCcw className="w-4 h-4" />
-            Reset
+            <ChefHat className="w-5 h-5" />
+            Get Recipe
           </button>
         )}
       </div>
       
       {isAnalyzing && (
-        <div className="analyzing-text">
+        <div className="text-blue-600 font-medium animate-pulse">
           Analyzing your food...
+        </div>
+      )}
+
+      {detectedIngredients.length > 0 && (
+        <div className="w-full max-w-md p-4 bg-gray-50 rounded-lg">
+          <h4 className="font-semibold mb-2">Detected Ingredients:</h4>
+          <ul className="list-disc pl-5">
+            {detectedIngredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
